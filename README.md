@@ -22,6 +22,16 @@ cd frontend/
 npm i
 ```
 
+Installation du backend : 
+```bash
+cd backend/
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
+*Si VSCode ne trouve pas les paquets après l'installation, veillez à sélectionner le bon interpréteur*
+
+
 Lancer les conteneurs docker
 ```bash
 docker-compose up --build --detach

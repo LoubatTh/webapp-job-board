@@ -1,4 +1,7 @@
+import { Hello } from "./services/advertisement.service";
+
 function App() {
+  Hello().then((res) => console.log(res));
 
   return (
     <>
@@ -8,7 +11,7 @@ function App() {
         </p>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

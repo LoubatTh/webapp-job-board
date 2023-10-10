@@ -3,6 +3,10 @@
 env
 node_modules
 
+# Python
+__pycache__/
+migrations/
+
 # Logs
 logs
 *.log

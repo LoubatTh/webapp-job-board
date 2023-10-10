@@ -1,11 +1,10 @@
 # Environment
 .env
 env
-node_modules
 
 # Python
+*.py[cod]
 __pycache__/
-migrations/
 
 # Logs
 logs

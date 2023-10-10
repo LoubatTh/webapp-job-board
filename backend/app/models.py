@@ -1,37 +1,68 @@
 from django.db import models
-from .models import Company
-from .models import Application
+
+
+class Company(models.Model):
+    company_id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+    size = models.IntegerField
+    logo = models.CharField
 
 
 class Advertisement(models.Model):
     advertisement_id = models.IntegerField(primary_key=True)
     description = models.CharField(max_length=1200)
     salary = models.FloatField
-    publication_date = models.DateField
-
-    ENVIRONMENT_CHOICES = [
-        ('hybrid', 'Hybrid'),
-        ('remote', 'Remote'),
-        ('site', 'Site'),
-    ]
-      
-    environment = models.CharField(
-        max_length=10,
-        choices=ENVIRONMENT_CHOICES,
-        default='site',
-    )
-
-    skills = models.CharField
     title = models.CharField
     city = models.CharField
     isActive = models.BooleanField
+    contract_type = models.CharField(
+        max_length=10,
+        choices=[
+            ("CDI", "CDI"),
+            ("CDD", "CDD"),
+            ("Freelance", "Freelance"),
+            ("Stage", "Stage"),
+        ],
+        default="CDI",
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    application = models.ForeignKey(Application, on_delete=models.CASCADE)
+    environment = models.CharField(
+        max_length=10,
+        choices=[
+            ("site", "site"),
+            ("remote", "remote"),
+            ("hybrid", "hybrid"),
+        ],
+        default="site",
+    )
+    created_at = models.DateField
+    updated_at = models.DateField
 
-class Company(models.Model):
-    company_id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50)
-    size = models.IntegerField(max_length=20)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    advertissement = models.ForeignKey(Advertisement, on_delete=models.CASCADE)
-    
+
+class Application(models.Model):
+    id = (models.IntegerField(primary_key=True),)
+    fullname = (models.CharField(max_length=50),)
+    email = (models.EmailField(max_length=254),)
+    phone = (models.CharField(max_length=50),)
+    cv = (models.FileField(upload_to="documents/cv/"),)
+    cover_letter = (models.FileField(upload_to="documents/cover_letter/"),)
+    advertisement = (models.ForeignKey(Advertisement, on_delete=models.CASCADE),)
+
+
+class User(models.Model):
+    user_id = models.IntegerField(primary_key=True)
+    full_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    password = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    created_at = models.DateField
+    role = models.CharField(
+        max_length=10,
+        choices=[
+            ("user", "user"),
+            ("recruiter", "recruiter"),
+            ("admin", "admin"),
+        ],
+        default="user",
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)

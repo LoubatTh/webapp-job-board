@@ -14,7 +14,9 @@ class Advertisement(models.Model):
     salary = models.FloatField()
     title = models.CharField()
     city = models.CharField()
-    isActive = models.BooleanField()
+    isActive = models.BooleanField(
+        default=True,
+    )
     contract_type = models.CharField(
         max_length=10,
         choices=[

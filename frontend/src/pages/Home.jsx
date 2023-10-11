@@ -2,17 +2,26 @@ import { useState, useEffect } from "react";
 
 import { GetAdvertisement } from "../services/advertisement.service";
 import Advertisement from "../components/Advertisement";
+import { GetCompany } from "../services/company.service";
 
 const Home = () => {
   const [data, setData] = useState();
+  const [companyData, setCompanyData] = useState();
+
   useEffect(() => {
     GetAdvertisement().then((res) => setData(res.data));
+    GetCompany().then((res) => setCompanyData(res.data));
   }, []);
 
   console.log(data);
-  const listAdvertisements = data?.map((item) => (
-    <Advertisement data={item} key={item.id} />
-  ));
+
+  const listAdvertisements = data?.map((item) => {
+    item.company = companyData?.find((company) => company.id === item.company_id);
+    return (
+      <Advertisement data={item} key={item.id} />
+      )
+    }
+  );
 
   return (
     <div className="container mx-auto flex flex-col items-center">

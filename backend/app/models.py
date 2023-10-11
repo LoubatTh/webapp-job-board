@@ -2,14 +2,14 @@ from django.db import models
 
 
 class Company(models.Model):
-    company_id = models.IntegerField(primary_key=True)
+    company_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     size = models.IntegerField()
     logo = models.CharField()
 
 
 class Advertisement(models.Model):
-    advertisement_id = models.IntegerField(primary_key=True)
+    advertisement_id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=1200)
     salary = models.FloatField()
     title = models.CharField()
@@ -22,6 +22,7 @@ class Advertisement(models.Model):
             ("CDD", "CDD"),
             ("Freelance", "Freelance"),
             ("Stage", "Stage"),
+            ("Alternance", "Alternance")
         ],
         default="CDI",
     )
@@ -40,7 +41,7 @@ class Advertisement(models.Model):
 
 
 class Application(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     fullname = models.CharField(max_length=50)
     email = models.EmailField(max_length=254)
     phone = models.CharField(max_length=50)
@@ -50,7 +51,7 @@ class Application(models.Model):
 
 
 class User(models.Model):
-    user_id = models.IntegerField(primary_key=True)
+    user_id = models.AutoField(primary_key=True)
     full_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=254)
     password = models.CharField(max_length=50)

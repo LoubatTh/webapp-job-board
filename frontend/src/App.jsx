@@ -1,15 +1,9 @@
-import { Hello } from "./services/advertisement.service";
+import Home from "./pages/Home";
 
 function App() {
-  Hello().then((res) => console.log(res));
-
   return (
     <>
-      <div>
-        <p>
-          Hello !
-        </p>
-      </div>
+      <Home />
     </>
   );
 }

@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 
-import { Login } from "../../services/user.service";
+import { PostUser } from "../../services/user.service";
 
-const LoginForm = () => {
+const RegisterForm = () => {
+  const [name, setName] = useState();
+  const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -15,8 +17,8 @@ const LoginForm = () => {
     };
 
     try {
-      // TODO: wait for backend to implement login
-      Login(JSON.stringify(data)).then((res) => console.log(res));
+      // TODO: don't make company mandatory in the backend
+      PostUser(JSON.stringify(data)).then((res) => console.log(res));
     } catch (error) {
       console.error(error);
     }
@@ -24,9 +26,29 @@ const LoginForm = () => {
 
   return (
     <div className="flex flex-col gap-4 bg-slate-50 p-7 rounded-lg border-2 border-slate-300">
-      <p className="text-xl text-start">Log in</p>
+      <p className="text-xl text-start">Sign in</p>
       <Input
         autoFocus
+        label="name"
+        aria-label="name"
+        placeholder="Enter a name"
+        variant="faded"
+        color="default"
+        type="name"
+        value={name}
+        onValueChange={setName}
+      />
+      <Input
+        label="phone"
+        aria-label="phone"
+        placeholder="Enter a phone"
+        variant="faded"
+        color="default"
+        type="phone"
+        value={phone}
+        onValueChange={setPhone}
+      />
+      <Input
         label="email"
         aria-label="email"
         placeholder="Enter a email"
@@ -62,13 +84,13 @@ const LoginForm = () => {
         </Button>
       </div>
       <p className="text-xs text-end text-gray-400">
-        Need an account ?{" "}
-        <Link to="/register" className="font-semibold text-blue-500">
-          Sign in
+        Already have an account ?{" "}
+        <Link to="/login" className="font-semibold text-blue-500">
+          Log in
         </Link>{" "}
       </p>
     </div>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

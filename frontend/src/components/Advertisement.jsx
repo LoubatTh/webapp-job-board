@@ -34,6 +34,7 @@ const Advertisement = (data) => {
               <li>Location : {offer.city}</li>
               <li>Environment : {offer.environment}</li>
               <li>Salary : {offer.salary}€</li>
+              <li>Posted : {offer.created_at}</li>
             </ul>
             <p className="mt-6">{offer.description}</p>
           </AccordionItem>

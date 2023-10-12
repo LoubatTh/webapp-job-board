@@ -18,7 +18,7 @@ const Advertisement = (data) => {
   return (
     <Card className="max-w-[300px] sm:max-w-[600px]">
       <CardHeader className="flex gap-3">
-        <Image src={offer.company.logo} height={40} width={40} />
+        <Image src={offer.company.logo} height={40} width={40} skeleton />
         <div className="flex flex-col">
           <p className="text-md">{offer.title}</p>
           <p className="text-small text-default-500">{offer.company.name}</p>

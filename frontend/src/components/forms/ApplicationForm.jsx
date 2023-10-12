@@ -32,14 +32,14 @@ const ApplicationForm = ({ adId }) => {
       advertisement: adId,
     };
 
-    console.log(data);
     try {
       PostApplication(JSON.stringify(data)).then((res) => console.log(res));
+      onOpenChange(false);
     } catch (error) {
       console.error(error);
     }
   };
-
+  
   return (
     <>
       <Button onPress={onOpen} color="primary" auto>

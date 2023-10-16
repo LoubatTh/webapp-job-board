@@ -8,6 +8,6 @@ export const PostUser = async (data) => API.post("/api/user", data);
 
 export const PutUser = async (id, data) => API.put(`/api/user/${id}`, data);
 
-export const DeleteUser = async (id) => API.put(`/api/user/${id}`);
+export const DeleteUser = async (id) => API.delete(`/api/user/${id}`);
 
 export const Login = async (data) => API.post("/api/login", data);

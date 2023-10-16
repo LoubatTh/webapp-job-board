@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -9,8 +8,6 @@ import Settings from "./pages/Settings";
 
 function App() {
   // TODO: Add state to track if user is logged in and if user is admin
-  const { isLoggedIn, setIsLoggedIn } = useState(false);
-  const { isAdmin, setIsAdmin } = useState(false);
 
   return (
     <>
@@ -18,8 +15,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {isAdmin ? <Route path="/dashboard" element={<Dashboard />} /> : null}
-        {isLoggedIn ? <Route path="/settings" element={<Settings />} /> : null}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </>
   );

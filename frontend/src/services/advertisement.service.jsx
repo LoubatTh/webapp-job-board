@@ -12,4 +12,4 @@ export const PutAdvertisement = async (id, data) =>
   API.put(`/api/advertisement/${id}`, data);
 
 export const DeleteAdvertisement = async (id) =>
-  API.put(`/api/advertisement/${id}`);
+  API.delete(`/api/advertisement/${id}`);

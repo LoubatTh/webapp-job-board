@@ -21,6 +21,7 @@ const ApplicationForm = ({ adId }) => {
   const [phone, setPhone] = useState();
   const [cv, setCv] = useState();
   const [message, setMessage] = useState();
+  const [advertisement, setAdvertisement] = useState();
 
   const handleSubmit = () => {
     let data = {
@@ -39,12 +40,18 @@ const ApplicationForm = ({ adId }) => {
       console.error(error);
     }
   };
-  
+
   return (
     <>
-      <Button onPress={onOpen} color="primary" auto>
-        Apply
-      </Button>
+      {adId === 0 ? (
+        <Button onPress={onOpen} color="primary" auto>
+          Apply
+        </Button>
+      ) : (
+        <Button onPress={onOpen} color="primary" className="w-full" auto>
+          Apply
+        </Button>
+      )}
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -109,6 +116,19 @@ const ApplicationForm = ({ adId }) => {
                   variant="faded"
                   onValueChange={setMessage}
                 />
+                {adId === 0 ? null : (
+                  <Input
+                    isRequired
+                    label="advertisement"
+                    aria-label="advertisement"
+                    placeholder="Enter the id of your advertisement"
+                    variant="faded"
+                    color="default"
+                    type="text"
+                    value={advertisement}
+                    onValueChange={setAdvertisement}
+                  />
+                )}
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" onPress={onClose}>

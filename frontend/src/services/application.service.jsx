@@ -12,4 +12,4 @@ export const PutApplication = async (id, data) =>
   API.put(`/api/application/${id}`, data);
 
 export const DeleteApplication = async (id) =>
-  API.put(`/api/application/${id}`);
+  API.delete(`/api/application/${id}`);

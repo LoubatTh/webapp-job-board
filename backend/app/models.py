@@ -54,22 +54,23 @@ class Application(models.Model):
 
 
 class AppUserManager(BaseUserManager):
-	def create_user(self, email, password=None):
+	def create_user(self, email, password=None, number=None):
 		if not email:
 			raise ValueError('An email is required.')
 		if not password:
 			raise ValueError('A password is required.')
 		email = self.normalize_email(email)
-		user = self.model(email=email)
+		user = self.model(email=email, number=number)
 		user.set_password(password)
 		user.save()
 		return user
-	def create_superuser(self, email, password=None):
+
+	def create_superuser(self, email, password=None, number=None):
 		if not email:
 			raise ValueError('An email is required.')
 		if not password:
 			raise ValueError('A password is required.')
-		user = self.create_user(email, password)
+		user = self.create_user(email, password, number)
 		user.is_superuser = True
 		user.save()
 		return user

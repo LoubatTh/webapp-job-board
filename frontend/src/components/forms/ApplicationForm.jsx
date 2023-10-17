@@ -30,7 +30,7 @@ const ApplicationForm = ({ adId }) => {
       phone: phone,
       cv: cv,
       message: message,
-      advertisement: adId,
+      advertisement: adId === 0 ? advertisement : adId,
     };
 
     try {
@@ -44,11 +44,11 @@ const ApplicationForm = ({ adId }) => {
   return (
     <>
       {adId === 0 ? (
-        <Button onPress={onOpen} color="primary" auto>
+        <Button onPress={onOpen} color="primary" className="w-full" auto>
           Apply
         </Button>
       ) : (
-        <Button onPress={onOpen} color="primary" className="w-full" auto>
+        <Button onPress={onOpen} color="primary" auto>
           Apply
         </Button>
       )}
@@ -116,7 +116,7 @@ const ApplicationForm = ({ adId }) => {
                   variant="faded"
                   onValueChange={setMessage}
                 />
-                {adId === 0 ? null : (
+                {adId === 0 ? (
                   <Input
                     isRequired
                     label="advertisement"
@@ -128,7 +128,7 @@ const ApplicationForm = ({ adId }) => {
                     value={advertisement}
                     onValueChange={setAdvertisement}
                   />
-                )}
+                ) : null}
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" onPress={onClose}>

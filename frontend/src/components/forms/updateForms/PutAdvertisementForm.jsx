@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { AiOutlineEdit } from "react-icons/ai";
 import {
   Button,
   Checkbox,
@@ -15,25 +17,35 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import { PostAdvertisement } from "../../../services/advertisement.service";
+
+import { PutAdvertisement } from "../../../services/advertisement.service";
 import { GetCompany } from "../../../services/company.service";
 
-const AdvertisementForm = ({ companyId }) => {
+const PutAdvertisementForm = ({ data }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [description, setDescription] = useState();
-  const [title, setTitle] = useState();
-  const [city, setCity] = useState();
-  const [salary, setSalary] = useState();
-  const [isActive, setIsActive] = useState();
-  const [contractType, setContractType] = useState("Contract type");
-  const [environment, setEnvironment] = useState("Environment");
-  const [company, setCompany] = useState("Company");
+  const [description, setDescription] = useState(data.description);
+  const [title, setTitle] = useState(data.title);
+  const [city, setCity] = useState(data.city);
+  const [salary, setSalary] = useState(data.salary);
+  const [isActive, setIsActive] = useState(data.isActive);
+  const [contractType, setContractType] = useState(data.contract_type);
+  const [environment, setEnvironment] = useState(data.environment);
+  const [company, setCompany] = useState();
   const [companyData, setCompanyData] = useState();
 
   useEffect(() => {
-    GetCompany().then((res) => setCompanyData(res.data));
-  }, []);
+    GetCompany().then((res) => {
+      setCompanyData(res.data);
+      setCompany(
+        res.data.find((item) => item.company_id === data.company).name
+      );
+    });
+  }, [data]);
+
+  console.log(
+    "test",
+    companyData?.find((item) => item.name === company.currentKey)
+  );
 
   const companyDropdownItems = companyData?.map((item) => {
     return <DropdownItem key={item.name}>{item.name}</DropdownItem>;
@@ -41,38 +53,38 @@ const AdvertisementForm = ({ companyId }) => {
 
   const handleSubmit = () => {
     const date = new Date();
-    let data = {
+
+    let formData = {
       title: title,
       city: city,
       salary: salary,
       isActive: isActive,
-      contractType: contractType.currentKey,
-      environment: environment.currentKey,
-      company: companyData?.find((item) => item.name === company.currentKey)
-        .company_id,
       description: description,
-      created_at: `${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}`,
+      contractType: contractType,
+      environment:
+        typeof environment === "object" ? environment.currentKey : environment,
+      company: companyData?.find((item) => item.name === company.currentKey)
+        ? companyData?.find((item) => item.name === company.currentKey)
+            .company_id
+        : data.company,
+      created_at: data.created_at,
       updated_at: `${date.getFullYear()}-${
         date.getMonth() + 1
       }-${date.getDate()}`,
     };
 
-    PostAdvertisement(JSON.stringify(data)).then((res) => console.log(res));
+    PutAdvertisement(data.advertisement_id, JSON.stringify(formData)).then(
+      (res) => console.log(res)
+    );
   };
 
   return (
     <>
-      {companyId === 0 ? (
-        <Button onPress={onOpen} color="primary">
-          Add advertisement
-        </Button>
-      ) : (
-        <Button onPress={onOpen} color="primary" className="w-full">
-          Add advertisement
-        </Button>
-      )}
+      <Button color="primary" variant="light" onPress={onOpen}>
+        <span className="text-xl">
+          <AiOutlineEdit />
+        </span>
+      </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (
@@ -125,7 +137,7 @@ const AdvertisementForm = ({ companyId }) => {
                     aria-label="contractType"
                     selectionMode="single"
                     selectedKeys={contractType}
-                    onSelectionChange={setContractType}
+                    onSelectionChange={(e) => setContractType(e.currentKey)}
                   >
                     <DropdownItem key="CDI">CDI</DropdownItem>
                     <DropdownItem key="CDD">CDD</DropdownItem>
@@ -149,22 +161,19 @@ const AdvertisementForm = ({ companyId }) => {
                     <DropdownItem key="remote">Remote</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
-                {companyId === 0 ? (
-                  <Dropdown>
-                    <DropdownTrigger>
-                      <Button variant="faded">{company}</Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="company"
-                      selectionMode="single"
-                      selectedKeys={company}
-                      onSelectionChange={setCompany}
-                    >
-                      {companyDropdownItems}
-                    </DropdownMenu>
-                  </Dropdown>
-                ) : null}
-
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button variant="faded">{company}</Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="company"
+                    selectionMode="single"
+                    selectedKeys={company}
+                    onSelectionChange={setCompany}
+                  >
+                    {companyDropdownItems}
+                  </DropdownMenu>
+                </Dropdown>
                 <Textarea
                   label="description"
                   value={description}
@@ -197,8 +206,20 @@ const AdvertisementForm = ({ companyId }) => {
   );
 };
 
-export default AdvertisementForm;
+export default PutAdvertisementForm;
 
-AdvertisementForm.propTypes = {
-  companyId: PropTypes.number.isRequired,
+PutAdvertisementForm.propTypes = {
+  data: PropTypes.shape({
+    advertisement_id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    salary: PropTypes.number.isRequired,
+    isActive: PropTypes.bool.isRequired,
+    environment: PropTypes.string.isRequired,
+    contract_type: PropTypes.string.isRequired,
+    created_at: PropTypes.string.isRequired,
+    updated_at: PropTypes.string.isRequired,
+    company: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+  }),
 };

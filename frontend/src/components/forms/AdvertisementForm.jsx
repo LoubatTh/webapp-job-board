@@ -65,11 +65,11 @@ const AdvertisementForm = ({ companyId }) => {
   return (
     <>
       {companyId === 0 ? (
-        <Button onPress={onOpen} color="primary">
+        <Button onPress={onOpen} variant="light" color="primary">
           Add advertisement
         </Button>
       ) : (
-        <Button onPress={onOpen} color="primary" variant="light" className="w-full">
+        <Button onPress={onOpen} color="primary">
           Add advertisement
         </Button>
       )}

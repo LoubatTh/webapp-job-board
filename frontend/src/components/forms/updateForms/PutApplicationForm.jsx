@@ -35,7 +35,6 @@ const PutApplicationForm = ({ item }) => {
     };
 
     try {
-      console.log(data);
       PutApplication(item.id, JSON.stringify(data)).then((res) =>
         console.log(res)
       );

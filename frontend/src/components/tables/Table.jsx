@@ -13,12 +13,13 @@ import {
   TableRow,
   Tooltip,
 } from "@nextui-org/react";
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import ApplicationForm from "../forms/ApplicationForm";
 import AdvertisementForm from "../forms/AdvertisementForm";
 import PutAdvertisementForm from "../forms/updateForms/PutAdvertisementForm";
 import PutApplicationForm from "../forms/updateForms/PutApplicationForm";
 import CompanyForm from "../forms/CompanyForm";
+import PutCompanyForm from "../forms/updateForms/PutCompanyForm";
 
 const DataTable = ({ type, data }) => {
   const colTitles = Object.keys(data[0]);
@@ -40,7 +41,7 @@ const DataTable = ({ type, data }) => {
         case "user":
           return <p>Actions</p>;
         case "company":
-          return <CompanyForm />
+          return <CompanyForm />;
         case "advertisement":
           return <AdvertisementForm companyId={0} />;
         case "application":
@@ -154,11 +155,7 @@ const DataTable = ({ type, data }) => {
                   align="center"
                   className="flex flex-row justify-center items-center gap-4"
                 >
-                  <Tooltip content="Edit">
-                    <span className="text-xl">
-                      <AiOutlineEdit />
-                    </span>
-                  </Tooltip>
+                  <PutCompanyForm item={item} />
                   <Tooltip content="Delete" color="danger">
                     <span className="text-xl text-danger">
                       <AiOutlineDelete />

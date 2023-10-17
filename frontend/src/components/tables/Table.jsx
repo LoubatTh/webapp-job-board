@@ -21,7 +21,7 @@ import PutApplicationForm from "../forms/updateForms/PutApplicationForm";
 import CompanyForm from "../forms/CompanyForm";
 import PutCompanyForm from "../forms/updateForms/PutCompanyForm";
 
-const DataTable = ({ type, data }) => {
+const DataTable = ({ type, data, del }) => {
   const colTitles = Object.keys(data[0]);
   const [page, setPage] = useState(1);
   const pages = Math.ceil(data.length / 10);
@@ -31,9 +31,9 @@ const DataTable = ({ type, data }) => {
     return data.slice(start, end);
   }, [page, data]);
 
-  // const deleteRecords = (id) => {
-  //   del(id).then((res) => console.log(res));
-  // };
+  const deleteRecords = (id) => {
+    del(id).then((res) => console.log(res));
+  };
 
   const tableHeader = () => {
     const addRecord = () => {
@@ -83,6 +83,20 @@ const DataTable = ({ type, data }) => {
                   <TableCell align="center">{item.role}</TableCell>
                   <TableCell align="center">{item.created_at}</TableCell>
                   <TableCell align="center">{item.updated_at}</TableCell>
+                  <TableCell
+                    align="center"
+                    className="flex flex-row justify-center items-center"
+                  >
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={() => deleteRecords(item.user_id)}
+                    >
+                      <span className="text-xl text-danger">
+                        <AiOutlineDelete />
+                      </span>
+                    </Button>
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -127,13 +141,11 @@ const DataTable = ({ type, data }) => {
                   <Button
                     color="danger"
                     variant="light"
-                    onPress={console.log("button")}
+                    onPress={() => deleteRecords(item.advertisement_id)}
                   >
-                    <Tooltip content="Delete" color="danger">
-                      <span className="text-xl text-danger">
-                        <AiOutlineDelete />
-                      </span>
-                    </Tooltip>
+                    <span className="text-xl text-danger">
+                      <AiOutlineDelete />
+                    </span>
                   </Button>
                 </TableCell>
               </TableRow>
@@ -153,14 +165,18 @@ const DataTable = ({ type, data }) => {
                 </TableCell>
                 <TableCell
                   align="center"
-                  className="flex flex-row justify-center items-center gap-4"
+                  className="flex flex-row justify-center items-center"
                 >
                   <PutCompanyForm item={item} />
-                  <Tooltip content="Delete" color="danger">
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => deleteRecords(item.company_id)}
+                  >
                     <span className="text-xl text-danger">
                       <AiOutlineDelete />
                     </span>
-                  </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             )}
@@ -180,14 +196,18 @@ const DataTable = ({ type, data }) => {
                 <TableCell align="center">{item.advertisement}</TableCell>
                 <TableCell
                   align="center"
-                  className="flex flex-row justify-center items-center gap-4"
+                  className="flex flex-row justify-center items-center"
                 >
                   <PutApplicationForm item={item} />
-                  <Tooltip content="Delete advertisement" color="danger">
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => deleteRecords(item.id)}
+                  >
                     <span className="text-xl text-danger">
                       <AiOutlineDelete />
                     </span>
-                  </Tooltip>
+                  </Button>
                 </TableCell>
               </TableRow>
             )}
@@ -223,5 +243,5 @@ export default DataTable;
 DataTable.propTypes = {
   type: PropType.string.isRequired,
   data: PropType.array.isRequired,
-  // del: PropType.func.isRequired,
+  del: PropType.func.isRequired,
 };

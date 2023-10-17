@@ -69,7 +69,7 @@ const AdvertisementForm = ({ companyId }) => {
           Add advertisement
         </Button>
       ) : (
-        <Button onPress={onOpen} color="primary" className="w-full">
+        <Button onPress={onOpen} color="primary" variant="light" className="w-full">
           Add advertisement
         </Button>
       )}

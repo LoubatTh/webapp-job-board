@@ -44,7 +44,7 @@ const ApplicationForm = ({ adId }) => {
   return (
     <>
       {adId === 0 ? (
-        <Button onPress={onOpen} color="primary" className="w-full" auto>
+        <Button onPress={onOpen} color="primary" variant="light" className="w-full" auto>
           Apply
         </Button>
       ) : (

@@ -18,6 +18,7 @@ import ApplicationForm from "../forms/ApplicationForm";
 import AdvertisementForm from "../forms/AdvertisementForm";
 import PutAdvertisementForm from "../forms/updateForms/PutAdvertisementForm";
 import PutApplicationForm from "../forms/updateForms/PutApplicationForm";
+import CompanyForm from "../forms/CompanyForm";
 
 const DataTable = ({ type, data }) => {
   const colTitles = Object.keys(data[0]);
@@ -39,7 +40,7 @@ const DataTable = ({ type, data }) => {
         case "user":
           return <p>Actions</p>;
         case "company":
-          return <p>Actions</p>;
+          return <CompanyForm />
         case "advertisement":
           return <AdvertisementForm companyId={0} />;
         case "application":

@@ -42,11 +42,6 @@ const PutAdvertisementForm = ({ data }) => {
     });
   }, [data]);
 
-  console.log(
-    "test",
-    companyData?.find((item) => item.name === company.currentKey)
-  );
-
   const companyDropdownItems = companyData?.map((item) => {
     return <DropdownItem key={item.name}>{item.name}</DropdownItem>;
   });

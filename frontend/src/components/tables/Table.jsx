@@ -17,6 +17,7 @@ import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import ApplicationForm from "../forms/ApplicationForm";
 import AdvertisementForm from "../forms/AdvertisementForm";
 import PutAdvertisementForm from "../forms/updateForms/PutAdvertisementForm";
+import PutApplicationForm from "../forms/updateForms/PutApplicationForm";
 
 const DataTable = ({ type, data }) => {
   const colTitles = Object.keys(data[0]);
@@ -183,11 +184,7 @@ const DataTable = ({ type, data }) => {
                   align="center"
                   className="flex flex-row justify-center items-center gap-4"
                 >
-                  <Tooltip content="Edit advertisement">
-                    <span className="text-xl">
-                      <AiOutlineEdit />
-                    </span>
-                  </Tooltip>
+                  <PutApplicationForm item={item} />
                   <Tooltip content="Delete advertisement" color="danger">
                     <span className="text-xl text-danger">
                       <AiOutlineDelete />

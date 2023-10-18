@@ -5,30 +5,43 @@ import {
   CardBody,
   CardFooter,
   Divider,
+  Accordion,
+  AccordionItem,
   Image,
 } from "@nextui-org/react";
+import ApplicationForm from "./forms/ApplicationForm";
 
 const Advertisement = (data) => {
   const offer = data.data;
+  const shortDescription = offer.description.slice(0, 90);
 
   return (
-    <Card className="max w-[300px] my-4">
+    <Card className="max-w-[300px] sm:max-w-[600px]">
       <CardHeader className="flex gap-3">
-        <Image src={offer.company.logo} height={40} width={40} />
+        <Image src={offer.company.logo} height={40} width={40} skeleton />
         <div className="flex flex-col">
           <p className="text-md">{offer.title}</p>
           <p className="text-small text-default-500">{offer.company.name}</p>
         </div>
       </CardHeader>
       <Divider />
-      <CardBody>
-        <p>{offer.description}</p>
+      <CardBody className="pb-0">
+        <p className="text-default-500">{shortDescription}...</p>
+        <Accordion>
+          <AccordionItem title="Learn more">
+            <ul>
+              <li>Contract : {offer.contract_type}</li>
+              <li>Location : {offer.city}</li>
+              <li>Environment : {offer.environment}</li>
+              <li>Salary : {offer.salary}€</li>
+              <li>Posted : {offer.created_at}</li>
+            </ul>
+            <p className="mt-6">{offer.description}</p>
+          </AccordionItem>
+        </Accordion>
       </CardBody>
-      <Divider />
-      <CardFooter>
-        <p>
-          {offer.contract_type} - {offer.environment} - {offer.city}{" "}
-        </p>
+      <CardFooter className="flex flex-row-reverse">
+        <ApplicationForm adId={offer.advertisement_id} />
       </CardFooter>
     </Card>
   );
@@ -36,12 +49,13 @@ const Advertisement = (data) => {
 
 export default Advertisement;
 
-Advertisement.PropTypes = {
+Advertisement.propTypes = {
   data: PropTypes.shape({
+    advertisement_id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     city: PropTypes.string.isRequired,
-    salary: PropTypes.string.isRequired,
+    salary: PropTypes.number.isRequired,
     contract_type: PropTypes.string.isRequired,
     environment: PropTypes.string.isRequired,
     created_at: PropTypes.string.isRequired,

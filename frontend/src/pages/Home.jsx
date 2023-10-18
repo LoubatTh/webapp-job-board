@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { GetAdvertisement } from "../services/advertisement.service";
 import Advertisement from "../components/Advertisement";
 import { GetCompany } from "../services/company.service";
+import { CircularProgress } from "@nextui-org/react";
+import Nav from "../components/Navbar";
 
 const Home = () => {
   const [data, setData] = useState();
@@ -13,21 +15,26 @@ const Home = () => {
     GetCompany().then((res) => setCompanyData(res.data));
   }, []);
 
-  console.log(data);
-
   const listAdvertisements = data?.map((item) => {
-    item.company = companyData?.find((company) => company.id === item.company_id);
-    return (
-      <Advertisement data={item} key={item.id} />
-      )
-    }
-  );
+    item.company = companyData?.find(
+      (company) => company.id === item.company_id
+    );
+    return <Advertisement data={item} key={item.id} />;
+  });
 
   return (
-    <div className="container mx-auto flex flex-col items-center">
-      <p className="text-3xl my-3 text-center">Home</p>
-      {listAdvertisements}
-    </div>
+    <>
+      <Nav />
+      <div className="container mx-auto flex flex-col items-center">
+        <div className="grid grid-cols-1 gap-5 mt-5">
+          {companyData ? (
+            listAdvertisements
+          ) : (
+            <CircularProgress aria-label="loading" />
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

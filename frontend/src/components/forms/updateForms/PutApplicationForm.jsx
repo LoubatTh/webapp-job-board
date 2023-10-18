@@ -15,7 +15,7 @@ import {
 import { PutApplication } from "../../../services/application.service";
 import { AiOutlineEdit } from "react-icons/ai";
 
-const PutApplicationForm = ({ item }) => {
+const PutApplicationForm = ({ item, refreshData }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [name, setName] = useState(item.fullname);
   const [email, setEmail] = useState(item.email);
@@ -35,9 +35,7 @@ const PutApplicationForm = ({ item }) => {
     };
 
     try {
-      PutApplication(item.id, JSON.stringify(data)).then((res) =>
-        console.log(res)
-      );
+      PutApplication(item.id, JSON.stringify(data)).then(() => refreshData());
       onOpenChange(false);
     } catch (error) {
       console.error(error);
@@ -163,4 +161,5 @@ PutApplicationForm.propTypes = {
       advertisement: PropTypes.number.isRequired,
     }.isRequired
   ),
+  refreshData: PropTypes.func.isRequired,
 };

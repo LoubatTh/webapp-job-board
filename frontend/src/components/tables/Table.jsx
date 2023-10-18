@@ -21,7 +21,7 @@ import PutApplicationForm from "../forms/updateForms/PutApplicationForm";
 import CompanyForm from "../forms/CompanyForm";
 import PutCompanyForm from "../forms/updateForms/PutCompanyForm";
 
-const DataTable = ({ type, data, del }) => {
+const DataTable = ({ type, data, del, refreshData }) => {
   const colTitles = Object.keys(data[0]);
   const [page, setPage] = useState(1);
   const pages = Math.ceil(data.length / 10);
@@ -32,7 +32,7 @@ const DataTable = ({ type, data, del }) => {
   }, [page, data]);
 
   const deleteRecords = (id) => {
-    del(id).then((res) => console.log(res));
+    del(id).then(() => refreshData(type));
   };
 
   const tableHeader = () => {
@@ -41,11 +41,13 @@ const DataTable = ({ type, data, del }) => {
         case "user":
           return <p>Actions</p>;
         case "company":
-          return <CompanyForm />;
+          return <CompanyForm refreshData={() => refreshData(type)} />;
         case "advertisement":
-          return <AdvertisementForm companyId={0} />;
+          return (
+            <AdvertisementForm companyId={0} refreshData={() => refreshData(type)} />
+          );
         case "application":
-          return <ApplicationForm adId={0} />;
+          return <ApplicationForm adId={0} refreshData={() => refreshData(type)} />;
       }
     };
 
@@ -137,7 +139,10 @@ const DataTable = ({ type, data, del }) => {
                   align="center"
                   className="flex flex-row justify-center items-center"
                 >
-                  <PutAdvertisementForm data={item} />
+                  <PutAdvertisementForm
+                    data={item}
+                    refreshData={() => refreshData(type)}
+                  />
                   <Button
                     color="danger"
                     variant="light"
@@ -167,7 +172,7 @@ const DataTable = ({ type, data, del }) => {
                   align="center"
                   className="flex flex-row justify-center items-center"
                 >
-                  <PutCompanyForm item={item} />
+                  <PutCompanyForm item={item} refreshData={() => refreshData(type)} />
                   <Button
                     color="danger"
                     variant="light"
@@ -198,7 +203,7 @@ const DataTable = ({ type, data, del }) => {
                   align="center"
                   className="flex flex-row justify-center items-center"
                 >
-                  <PutApplicationForm item={item} />
+                  <PutApplicationForm item={item} refreshData={() => refreshData(type)}/>
                   <Button
                     color="danger"
                     variant="light"
@@ -244,4 +249,7 @@ DataTable.propTypes = {
   type: PropType.string.isRequired,
   data: PropType.array.isRequired,
   del: PropType.func.isRequired,
+  refreshData: PropType.func.isRequired,
+  // refresh: PropType.array.isRequired,
+  // setRefresh: PropType.func.isRequired,
 };

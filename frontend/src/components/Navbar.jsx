@@ -36,12 +36,12 @@ const Nav = ({ isAdmin, isLoggedIn }) => {
             />
           </Link>
         </NavbarBrand>
-        {isAdmin ? (
+        {!isAdmin ? (
           <NavbarItem className="text-black">
             <Link to="/dashboard">Dashboard</Link>
           </NavbarItem>
         ) : null}
-        {isLoggedIn ? (
+        {!isLoggedIn ? (
           <>
             <NavbarItem className="text-black">
               <Link to="/settings">Settings</Link>

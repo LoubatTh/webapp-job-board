@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PostCompany } from "../../services/company.service";
+import PropTypes from "prop-types";
 import {
   Button,
   Input,
@@ -11,7 +11,9 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-const CompanyForm = () => {
+import { PostCompany } from "../../services/company.service";
+
+const CompanyForm = ({ refreshData }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [name, setName] = useState();
   const [size, setSize] = useState();
@@ -24,8 +26,12 @@ const CompanyForm = () => {
       logo: logo,
     };
 
-    PostCompany(JSON.stringify(data)).then((res) => console.log(res));
-    onOpenChange(false);
+    try {
+      PostCompany(JSON.stringify(data)).then(() => refreshData());
+      onOpenChange(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -104,3 +110,7 @@ const CompanyForm = () => {
 };
 
 export default CompanyForm;
+
+CompanyForm.propTypes = {
+  refreshData: PropTypes.func.isRequired,
+};

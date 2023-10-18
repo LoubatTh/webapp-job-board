@@ -14,7 +14,7 @@ import {
 
 import { PutCompany } from "../../../services/company.service";
 
-const PutCompanyForm = ({ item }) => {
+const PutCompanyForm = ({ item, refreshData }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [name, setName] = useState(item.name);
   const [size, setSize] = useState(item.size);
@@ -27,10 +27,14 @@ const PutCompanyForm = ({ item }) => {
       logo: logo,
     };
 
-    PutCompany(item.company_id, JSON.stringify(data)).then((res) =>
-      console.log(res)
-    );
-    onOpenChange(false);
+    try {
+      PutCompany(item.company_id, JSON.stringify(data)).then(() =>
+        refreshData()
+      );
+      onOpenChange(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -117,4 +121,5 @@ PutCompanyForm.propTypes = {
     size: PropTypes.number.isRequired,
     logo: PropTypes.string.isRequired,
   }).isRequired,
+  refreshData: PropTypes.func.isRequired,
 };

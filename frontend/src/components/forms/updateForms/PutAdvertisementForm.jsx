@@ -21,7 +21,7 @@ import {
 import { PutAdvertisement } from "../../../services/advertisement.service";
 import { GetCompany } from "../../../services/company.service";
 
-const PutAdvertisementForm = ({ data }) => {
+const PutAdvertisementForm = ({ data, refreshData }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [description, setDescription] = useState(data.description);
   const [title, setTitle] = useState(data.title);
@@ -68,9 +68,13 @@ const PutAdvertisementForm = ({ data }) => {
       }-${date.getDate()}`,
     };
 
-    PutAdvertisement(data.advertisement_id, JSON.stringify(formData)).then(
-      (res) => console.log(res)
-    );
+    try {
+      PutAdvertisement(data.advertisement_id, JSON.stringify(formData)).then(
+        () => refreshData()
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -217,4 +221,5 @@ PutAdvertisementForm.propTypes = {
     company: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
   }),
+  refreshData: PropTypes.func.isRequired,
 };

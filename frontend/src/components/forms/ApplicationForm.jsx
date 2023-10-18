@@ -14,7 +14,7 @@ import {
 
 import { PostApplication } from "../../services/application.service";
 
-const ApplicationForm = ({ adId }) => {
+const ApplicationForm = ({ adId, refreshData }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -34,7 +34,9 @@ const ApplicationForm = ({ adId }) => {
     };
 
     try {
-      PostApplication(JSON.stringify(data)).then((res) => console.log(res));
+      PostApplication(JSON.stringify(data)).then(() =>
+        refreshData ? refreshData() : null
+      );
       onOpenChange(false);
     } catch (error) {
       console.error(error);
@@ -156,4 +158,5 @@ export default ApplicationForm;
 
 ApplicationForm.propTypes = {
   adId: PropTypes.number.isRequired,
+  refreshData: PropTypes.func,
 };

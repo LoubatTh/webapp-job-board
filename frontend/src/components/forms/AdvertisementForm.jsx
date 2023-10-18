@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { PostAdvertisement } from "../../services/advertisement.service";
 import { GetCompany } from "../../services/company.service";
 
-const AdvertisementForm = ({ companyId }) => {
+const AdvertisementForm = ({ companyId, refreshData }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [description, setDescription] = useState();
   const [title, setTitle] = useState();
@@ -59,7 +59,12 @@ const AdvertisementForm = ({ companyId }) => {
       }-${date.getDate()}`,
     };
 
-    PostAdvertisement(JSON.stringify(data)).then((res) => res.status != 201 ? console.log(res) : null);
+    try {
+      PostAdvertisement(JSON.stringify(data)).then(() => refreshData());
+      onOpenChange(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -201,4 +206,5 @@ export default AdvertisementForm;
 
 AdvertisementForm.propTypes = {
   companyId: PropType.number.isRequired,
+  refreshData: PropType.func.isRequired,
 };

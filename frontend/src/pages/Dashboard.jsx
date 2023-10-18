@@ -3,20 +3,14 @@ import { CircularProgress } from "@nextui-org/react";
 
 import Nav from "../components/Navbar";
 import DataTable from "../components/tables/Table";
-import { GetUser, PutUser, DeleteUser } from "../services/user.service";
-import {
-  GetCompany,
-  PutCompany,
-  DeleteCompany,
-} from "../services/company.service";
+import { GetUser, DeleteUser } from "../services/user.service";
+import { GetCompany, DeleteCompany } from "../services/company.service";
 import {
   GetAdvertisement,
-  PutAdvertisement,
   DeleteAdvertisement,
 } from "../services/advertisement.service";
 import {
   GetApplication,
-  PutApplication,
   DeleteApplication,
 } from "../services/application.service";
 
@@ -25,6 +19,8 @@ const Dashboard = () => {
   const [companyData, setCompanyData] = useState();
   const [advertisementData, setAdvertisementData] = useState();
   const [applicationData, setApplicationData] = useState();
+  const [refresh, setRefresh] = useState([false, "user"]);
+  const refreshData = async (type) => setRefresh([!refresh[0], type]);
 
   useEffect(() => {
     GetUser().then((res) => setUserData(res.data));
@@ -32,6 +28,24 @@ const Dashboard = () => {
     GetAdvertisement().then((res) => setAdvertisementData(res.data));
     GetApplication().then((res) => setApplicationData(res.data));
   }, []);
+
+  useEffect(() => {
+    switch (refresh[1]) {
+      case "user":
+        GetUser().then((res) => setUserData(res.data));
+        break;
+      case "company":
+        GetCompany().then((res) => setCompanyData(res.data));
+        break;
+      case "advertisement":
+        GetAdvertisement().then((res) => setAdvertisementData(res.data));
+        break;
+      case "application":
+        GetApplication().then((res) => setApplicationData(res.data));
+        break;
+    }
+  }, [refresh]);
+
 
   return (
     <>
@@ -43,8 +57,8 @@ const Dashboard = () => {
             <DataTable
               type="user"
               data={userData}
-              put={PutUser}
               del={DeleteUser}
+              refreshData={refreshData}
             />
           ) : (
             <CircularProgress aria-label="loading" />
@@ -53,8 +67,8 @@ const Dashboard = () => {
             <DataTable
               type="company"
               data={companyData}
-              put={PutCompany}
               del={DeleteCompany}
+              refreshData={refreshData}
             />
           ) : (
             <CircularProgress aria-label="loading" />
@@ -63,8 +77,8 @@ const Dashboard = () => {
             <DataTable
               type="advertisement"
               data={advertisementData}
-              put={PutAdvertisement}
               del={DeleteAdvertisement}
+              refreshData={refreshData}
             />
           ) : (
             <CircularProgress aria-label="loading" />
@@ -73,8 +87,8 @@ const Dashboard = () => {
             <DataTable
               type="application"
               data={applicationData}
-              put={PutApplication}
               del={DeleteApplication}
+              refreshData={refreshData}
             />
           ) : (
             <CircularProgress aria-label="loading" />

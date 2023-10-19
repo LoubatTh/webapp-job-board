@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import { Login } from "../../services/user.service";
+import { AuthContext } from "../../context/authContext";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const authContext = useContext(AuthContext);
 
   const handleSubmit = () => {
     let data = {
@@ -14,12 +16,11 @@ const LoginForm = () => {
       password: password,
     };
 
-    try {
-      // TODO: wait for backend to implement login
-      Login(JSON.stringify(data)).then((res) => console.log(res));
-    } catch (error) {
-      console.error(error);
-    }
+    Login(JSON.stringify(data))
+      .then(() => {
+        authContext.SetLogIn(true);
+      })
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -47,15 +48,12 @@ const LoginForm = () => {
         onValueChange={setPassword}
       />
       <div className="flex flex-row gap-3 justify-center">
-        <Button
-          color="danger"
-          className="flex self-center w-1/3"
-        >
+        <Button color="danger" className="flex self-center w-1/3">
           <Link to="/">Cancel</Link>
         </Button>
         <Button
           color="primary"
-          onPress={handleSubmit()}
+          onPress={() => handleSubmit()}
           className="flex self-center w-1/3"
         >
           Apply

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -10,8 +9,21 @@ import {
   NavbarItem,
 } from "@nextui-org/react";
 
-const Nav = ({ isAdmin, isLoggedIn }) => {
+import { Logout } from "../services/user.service";
+import { AuthContext } from "../context/authContext";
+
+const Nav = () => {
+  const authContext = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    Logout().then(() => {
+      authContext.SetLogIn(false);
+    });
+  };
+
+  console.log(authContext.user);
+
   return (
     <Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} isBordered>
       <NavbarContent className="flex sm:hidden" justify="start">
@@ -36,18 +48,24 @@ const Nav = ({ isAdmin, isLoggedIn }) => {
             />
           </Link>
         </NavbarBrand>
-        {!isAdmin ? (
-          <NavbarItem className="text-black">
-            <Link to="/dashboard">Dashboard</Link>
-          </NavbarItem>
+        {authContext.isLoggedIn && authContext.user ? (
+          authContext.user.is_staff && authContext.user.is_superuser ? (
+            <NavbarItem className="text-black">
+              <Link to="/dashboard">Dashboard</Link>
+            </NavbarItem>
+          ) : null
         ) : null}
-        {!isLoggedIn ? (
+        {authContext.isLoggedIn ? (
           <>
             <NavbarItem className="text-black">
               <Link to="/settings">Settings</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button color="warning" variant="flat">
+              <Button
+                color="warning"
+                variant="flat"
+                onPress={() => handleLogout()}
+              >
                 <Link to="/">Log out</Link>
               </Button>
             </NavbarItem>
@@ -72,8 +90,3 @@ const Nav = ({ isAdmin, isLoggedIn }) => {
 };
 
 export default Nav;
-
-Nav.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-};

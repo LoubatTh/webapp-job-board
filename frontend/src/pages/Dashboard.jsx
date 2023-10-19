@@ -3,7 +3,7 @@ import { CircularProgress } from "@nextui-org/react";
 
 import Nav from "../components/Navbar";
 import DataTable from "../components/tables/Table";
-import { GetUser, DeleteUser } from "../services/user.service";
+// import { GetUser, DeleteUser } from "../services/user.service";
 import { GetCompany, DeleteCompany } from "../services/company.service";
 import {
   GetAdvertisement,
@@ -15,7 +15,7 @@ import {
 } from "../services/application.service";
 
 const Dashboard = () => {
-  const [userData, setUserData] = useState();
+  // const [userData, setUserData] = useState();
   const [companyData, setCompanyData] = useState();
   const [advertisementData, setAdvertisementData] = useState();
   const [applicationData, setApplicationData] = useState();
@@ -23,7 +23,7 @@ const Dashboard = () => {
   const refreshData = async (type) => setRefresh([!refresh[0], type]);
 
   useEffect(() => {
-    GetUser().then((res) => setUserData(res.data));
+    // GetUser().then((res) => setUserData(res.data));
     GetCompany().then((res) => setCompanyData(res.data));
     GetAdvertisement().then((res) => setAdvertisementData(res.data));
     GetApplication().then((res) => setApplicationData(res.data));
@@ -31,9 +31,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     switch (refresh[1]) {
-      case "user":
-        GetUser().then((res) => setUserData(res.data));
-        break;
+      // case "user":
+      //   GetUser().then((res) => setUserData(res.data));
+      //   break;
       case "company":
         GetCompany().then((res) => setCompanyData(res.data));
         break;
@@ -53,7 +53,7 @@ const Dashboard = () => {
       <Nav />
       <div>
         <div className="grid grid-cols-1 gap-5 m-5">
-          {userData ? (
+          {/* {userData ? (
             <DataTable
               type="user"
               data={userData}
@@ -62,7 +62,7 @@ const Dashboard = () => {
             />
           ) : (
             <CircularProgress aria-label="loading" />
-          )}
+          )} */}
           {companyData ? (
             <DataTable
               type="company"

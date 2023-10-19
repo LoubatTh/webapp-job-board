@@ -16,7 +16,7 @@ const Advertisement = (data) => {
   const shortDescription = offer.description.slice(0, 90);
 
   return (
-    <Card className="max-w-[300px] sm:max-w-[600px]">
+    <Card className="max-w-[300px] sm:max-w-[600px] sm:w-[600px]">
       <CardHeader className="flex gap-3">
         <Image src={offer.company.logo} height={40} width={40} skeleton />
         <div className="flex flex-col">

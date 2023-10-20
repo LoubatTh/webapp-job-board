@@ -11,14 +11,14 @@ import {
 } from "@nextui-org/react";
 import ApplicationForm from "./forms/ApplicationForm";
 
-const Advertisement = (data) => {
-  const offer = data.data;
+const Advertisement = ({ data }) => {
+  const offer = data;
   const shortDescription = offer.description.slice(0, 90);
 
   return (
     <Card className="max-w-[300px] sm:max-w-[600px] sm:w-[600px]">
       <CardHeader className="flex gap-3">
-        <Image src={offer.company.logo} height={40} width={40} skeleton />
+        <Image src={offer.company.logo} height={40} width={40} />
         <div className="flex flex-col">
           <p className="text-md">{offer.title}</p>
           <p className="text-small text-default-500">{offer.company.name}</p>

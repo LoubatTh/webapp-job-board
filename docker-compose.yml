@@ -24,23 +24,9 @@ services:
     networks:
       - job-board-network
 
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./frontend/.env
-    volumes:
-      - ./frontend:/app
-    networks:
-      - job-board-network
-
   backend:
     container_name: backend
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
@@ -53,6 +39,20 @@ services:
       - database
     networks:
       - job-board-network
+
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - ./frontend/.env
+  #   volumes:
+  #     - ./frontend:/app
+  #   networks:
+  #     - job-board-network
 
 networks:
   job-board-network:

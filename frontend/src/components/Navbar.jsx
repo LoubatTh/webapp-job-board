@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Image,
@@ -14,26 +14,27 @@ import { AuthContext } from "../context/authContext";
 
 const Nav = () => {
   const authContext = useContext(AuthContext);
+  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     Logout().then(() => {
       authContext.SetLogIn(false);
+      navigate('/')
     });
   };
-
-  console.log(authContext.user);
+  
 
   return (
     <Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} isBordered>
       <NavbarContent className="flex sm:hidden" justify="start">
         <NavbarBrand>
           <Link to="/">
-            <Image
-              src="https://quecarta.com/uploads/2020/06/01/233654162374.256x256.jpg"
-              height={40}
-              width={40}
-            />
+          <Image
+            src="https://quecarta.com/uploads/2020/06/01/233654162374.256x256.jpg"
+            height={40}
+            width={40}
+          />
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -73,13 +74,13 @@ const Nav = () => {
         ) : (
           <>
             <NavbarItem>
-              <Button color="warning" variant="flat">
-                <Link to="/login">Log in</Link>
+              <Button color="warning" variant="flat" onPress={() => navigate("/login")}>
+                Log in
               </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button color="warning" variant="flat">
-                <Link to="/register">Sign in</Link>
+              <Button color="warning" variant="flat" onPress={() => navigate("/register")}>
+                Sign in
               </Button>
             </NavbarItem>
           </>

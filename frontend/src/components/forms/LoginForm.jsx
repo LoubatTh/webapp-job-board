@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Login } from "../../services/user.service";
 import { AuthContext } from "../../context/authContext";
 
 const LoginForm = () => {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const authContext = useContext(AuthContext);
 
   const handleSubmit = () => {
     let data = {
@@ -21,6 +22,19 @@ const LoginForm = () => {
         authContext.SetLogIn(true);
       })
       .catch((e) => console.error(e));
+
+    redirect();
+  };
+
+  // FIXME: redirect should be done on first click
+  const redirect = () => {
+    console.log(authContext);
+    if (authContext.isLoggedIn) {
+      if (authContext.user.is_staff && authContext.user.is_superuser) {
+        return navigate("/dashboard");
+      }
+      return navigate("/");
+    }
   };
 
   return (

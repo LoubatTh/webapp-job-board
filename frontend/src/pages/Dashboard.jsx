@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { CircularProgress } from "@nextui-org/react";
 
+import { AuthContext } from "../context/authContext";
 import Nav from "../components/Navbar";
 import DataTable from "../components/tables/Table";
-// import { GetUser, DeleteUser } from "../services/user.service";
 import { GetCompany, DeleteCompany } from "../services/company.service";
 import {
   GetAdvertisement,
@@ -13,17 +13,25 @@ import {
   GetApplication,
   DeleteApplication,
 } from "../services/application.service";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  // const [userData, setUserData] = useState();
   const [companyData, setCompanyData] = useState();
   const [advertisementData, setAdvertisementData] = useState();
   const [applicationData, setApplicationData] = useState();
   const [refresh, setRefresh] = useState([false, "user"]);
   const refreshData = async (type) => setRefresh([!refresh[0], type]);
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    // GetUser().then((res) => setUserData(res.data));
+    if (authContext.isLoggedIn && authContext.user.is_superuser) {
+      return;
+    }
+    return navigate("/");
+  });
+
+  useEffect(() => {
     GetCompany().then((res) => setCompanyData(res.data));
     GetAdvertisement().then((res) => setAdvertisementData(res.data));
     GetApplication().then((res) => setApplicationData(res.data));
@@ -31,9 +39,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     switch (refresh[1]) {
-      // case "user":
-      //   GetUser().then((res) => setUserData(res.data));
-      //   break;
       case "company":
         GetCompany().then((res) => setCompanyData(res.data));
         break;
@@ -46,54 +51,40 @@ const Dashboard = () => {
     }
   }, [refresh]);
 
-
   return (
     <>
-      {/* TODO: add props to Nav */}
       <Nav />
-      <div>
-        <div className="grid grid-cols-1 gap-5 m-5">
-          {/* {userData ? (
-            <DataTable
-              type="user"
-              data={userData}
-              del={DeleteUser}
-              refreshData={refreshData}
-            />
-          ) : (
-            <CircularProgress aria-label="loading" />
-          )} */}
-          {companyData ? (
-            <DataTable
-              type="company"
-              data={companyData}
-              del={DeleteCompany}
-              refreshData={refreshData}
-            />
-          ) : (
-            <CircularProgress aria-label="loading" />
-          )}
-          {advertisementData ? (
-            <DataTable
-              type="advertisement"
-              data={advertisementData}
-              del={DeleteAdvertisement}
-              refreshData={refreshData}
-            />
-          ) : (
-            <CircularProgress aria-label="loading" />
-          )}
-          {applicationData ? (
-            <DataTable
-              type="application"
-              data={applicationData}
-              del={DeleteApplication}
-              refreshData={refreshData}
-            />
-          ) : (
-            <CircularProgress aria-label="loading" />
-          )}
-        </div>
+      <div className="grid grid-cols-1 gap-5 m-5">
+        {companyData ? (
+          <DataTable
+            type="company"
+            data={companyData}
+            del={DeleteCompany}
+            refreshData={refreshData}
+          />
+        ) : (
+          <CircularProgress aria-label="loading" />
+        )}
+        {advertisementData ? (
+          <DataTable
+            type="advertisement"
+            data={advertisementData}
+            del={DeleteAdvertisement}
+            refreshData={refreshData}
+          />
+        ) : (
+          <CircularProgress aria-label="loading" />
+        )}
+        {applicationData ? (
+          <DataTable
+            type="application"
+            data={applicationData}
+            del={DeleteApplication}
+            refreshData={refreshData}
+          />
+        ) : (
+          <CircularProgress aria-label="loading" />
+        )}
       </div>
     </>
   );

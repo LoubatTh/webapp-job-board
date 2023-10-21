@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Login, Register } from "../../services/user.service";
+import { AuthContext } from "../../context/authContext";
 
 const RegisterForm = () => {
-  const authContext = useContext();
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
@@ -27,7 +29,10 @@ const RegisterForm = () => {
             password: password,
           })
         )
-          .then(() => authContext.SetLogIn(true))
+          .then(() => {
+            authContext.SetLogIn(true)
+            navigate("/")
+          })
           .catch((e) => console.error(e));
       })
       .catch((e) => console.error(e));

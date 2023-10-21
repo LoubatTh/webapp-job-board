@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { PostUser } from "../../services/user.service";
+import { Login, Register } from "../../services/user.service";
+import { AuthContext } from "../../context/authContext";
 
 const RegisterForm = () => {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
@@ -13,15 +16,26 @@ const RegisterForm = () => {
   const handleSubmit = () => {
     let data = {
       email: email,
+      username: name,
+      number: phone,
       password: password,
     };
 
-    try {
-      // TODO: don't make company mandatory in the backend
-      PostUser(JSON.stringify(data)).then((res) => console.log(res));
-    } catch (error) {
-      console.error(error);
-    }
+    Register(JSON.stringify(data))
+      .then(() => {
+        Login(
+          JSON.stringify({
+            email: email,
+            password: password,
+          })
+        )
+          .then(() => {
+            authContext.SetLogIn(true)
+            navigate("/")
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -69,15 +83,12 @@ const RegisterForm = () => {
         onValueChange={setPassword}
       />
       <div className="flex flex-row gap-3 justify-center">
-        <Button
-          color="danger"
-          className="flex self-center w-1/3"
-        >
+        <Button color="danger" className="flex self-center w-1/3">
           <Link to="/">Cancel</Link>
         </Button>
         <Button
           color="primary"
-          onPress={handleSubmit()}
+          onPress={() => handleSubmit()}
           className="flex self-center w-1/3"
         >
           Apply

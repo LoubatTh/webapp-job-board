@@ -1,6 +1,5 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   Image,
@@ -10,18 +9,32 @@ import {
   NavbarItem,
 } from "@nextui-org/react";
 
-const Nav = ({ isAdmin, isLoggedIn }) => {
+import { Logout } from "../services/user.service";
+import { AuthContext } from "../context/authContext";
+
+const Nav = () => {
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    Logout().then(() => {
+      authContext.SetLogIn(false);
+      navigate('/')
+    });
+  };
+  
+
   return (
     <Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} isBordered>
       <NavbarContent className="flex sm:hidden" justify="start">
         <NavbarBrand>
           <Link to="/">
-            <Image
-              src="https://quecarta.com/uploads/2020/06/01/233654162374.256x256.jpg"
-              height={40}
-              width={40}
-            />
+          <Image
+            src="https://quecarta.com/uploads/2020/06/01/233654162374.256x256.jpg"
+            height={40}
+            width={40}
+          />
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -36,18 +49,24 @@ const Nav = ({ isAdmin, isLoggedIn }) => {
             />
           </Link>
         </NavbarBrand>
-        {!isAdmin ? (
-          <NavbarItem className="text-black">
-            <Link to="/dashboard">Dashboard</Link>
-          </NavbarItem>
+        {authContext.isLoggedIn && authContext.user ? (
+          authContext.user.is_staff && authContext.user.is_superuser ? (
+            <NavbarItem className="text-black">
+              <Link to="/dashboard">Dashboard</Link>
+            </NavbarItem>
+          ) : null
         ) : null}
-        {!isLoggedIn ? (
+        {authContext.isLoggedIn ? (
           <>
             <NavbarItem className="text-black">
               <Link to="/settings">Settings</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button color="warning" variant="flat">
+              <Button
+                color="warning"
+                variant="flat"
+                onPress={() => handleLogout()}
+              >
                 <Link to="/">Log out</Link>
               </Button>
             </NavbarItem>
@@ -55,13 +74,13 @@ const Nav = ({ isAdmin, isLoggedIn }) => {
         ) : (
           <>
             <NavbarItem>
-              <Button color="warning" variant="flat">
-                <Link to="/login">Log in</Link>
+              <Button color="warning" variant="flat" onPress={() => navigate("/login")}>
+                Log in
               </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button color="warning" variant="flat">
-                <Link to="/register">Sign in</Link>
+              <Button color="warning" variant="flat" onPress={() => navigate("/register")}>
+                Sign in
               </Button>
             </NavbarItem>
           </>
@@ -72,8 +91,3 @@ const Nav = ({ isAdmin, isLoggedIn }) => {
 };
 
 export default Nav;
-
-Nav.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-};

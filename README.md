@@ -16,10 +16,11 @@
 - Node et npm
 - Docker
 
-### Installation du frontend :
+### Initialisation du frontend :
 ```bash
 cd frontend/
 npm i
+npm run dev
 ```
 
 ### Installation du backend : 

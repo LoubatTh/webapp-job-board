@@ -7,8 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 
 function App() {
-  // TODO: Add state to track if user is logged in and if user is admin
-
   return (
     <>
       <Routes>

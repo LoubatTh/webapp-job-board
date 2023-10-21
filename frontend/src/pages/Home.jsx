@@ -19,7 +19,7 @@ const Home = () => {
     item.company = companyData?.find(
       (company) => company.id === item.company_id
     );
-    return <Advertisement data={item} key={item.id} />;
+    return <Advertisement data={item} key={item.advertisement_id} />;
   });
 
   return (

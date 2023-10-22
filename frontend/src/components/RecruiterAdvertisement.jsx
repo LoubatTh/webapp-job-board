@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Divider,
   Table,
@@ -28,7 +27,6 @@ const RecruiterAdvertisement = ({ data, applications, del, refresh }) => {
     { key: "cv", value: "cv" },
     { key: "message", value: "message" },
   ];
-  console.log("RecruiterAdvertisement", applications);
 
   return (
     <>
@@ -52,7 +50,7 @@ const RecruiterAdvertisement = ({ data, applications, del, refresh }) => {
           </div>
         </CardHeader>
         <Divider />
-        <CardBody className="pb-0 gap-3">
+        <CardBody className="gap-3">
           <Accordion>
             <AccordionItem title="Infos">
               <ul>
@@ -80,7 +78,11 @@ const RecruiterAdvertisement = ({ data, applications, del, refresh }) => {
                   <TableCell align="center">{item.fullname}</TableCell>
                   <TableCell align="center">{item.email}</TableCell>
                   <TableCell align="center">{item.phone}</TableCell>
-                  <TableCell align="center"><a href={item.cv} target="_blank" rel="noreferrer"><AiOutlineLink/></a></TableCell>
+                  <TableCell align="center">
+                    <a href={item.cv} target="_blank" rel="noreferrer">
+                      <AiOutlineLink />
+                    </a>
+                  </TableCell>
                   <TableCell align="center">
                     <Tooltip content={item.message}>
                       <span>{item.message.slice(0, 10)}</span>
@@ -91,7 +93,6 @@ const RecruiterAdvertisement = ({ data, applications, del, refresh }) => {
             </TableBody>
           </Table>
         </CardBody>
-        <CardFooter className="flex flex-row-reverse gap-3">...</CardFooter>
       </Card>
     </>
   );

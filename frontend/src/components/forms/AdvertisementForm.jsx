@@ -48,8 +48,6 @@ const AdvertisementForm = ({ companyId, refreshData }) => {
       isActive: isActive,
       contractType: contractType.currentKey,
       environment: environment.currentKey,
-      company: companyData?.find((item) => item.name === company.currentKey)
-        .company_id,
       description: description,
       created_at: `${date.getFullYear()}-${
         date.getMonth() + 1
@@ -58,6 +56,12 @@ const AdvertisementForm = ({ companyId, refreshData }) => {
         date.getMonth() + 1
       }-${date.getDate()}`,
     };
+    
+    if(companyId === 0) {
+      data = {...data, company: companyData?.find((item) => item.name === company.currentKey)
+        .company_id}
+    }
+    data = {...data, company: companyId}
 
     try {
       PostAdvertisement(JSON.stringify(data)).then(() => refreshData());

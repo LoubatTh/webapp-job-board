@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { GetCompanyAdvertisement } from "../services/company.service";
 import {
@@ -7,9 +7,12 @@ import {
 } from "../services/advertisement.service";
 import RecruiterAdvertisement from "./RecruiterAdvertisement";
 import { CircularProgress } from "@nextui-org/react";
+import AdvertisementForm from "./forms/AdvertisementForm";
+import { AuthContext } from "../context/authContext";
 
 // TODO: Add user put form to update user information
 const RecruiterSettings = () => {
+  const authContext = useContext(AuthContext);
   const [advertisement, setAdvertisement] = useState([]);
   const [applications, setApplications] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -36,11 +39,12 @@ const RecruiterSettings = () => {
     });
   }, [advertisement]);
 
+  console.log(authContext.user.company)
+
   const refreshData = async () => setRefresh(!refresh[0]);
 
   const listAdvertisement = () => {
     return advertisement.map((ad) => {
-      console.log(ad, applications);
       let app = applications.filter(
         (application) => application.advertisement == ad.advertisement_id
       );
@@ -65,6 +69,7 @@ const RecruiterSettings = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-5 mt-5">
+        <AdvertisementForm companyId={authContext.user.company}  refreshData={refreshData}/>
         {advertisement.length > 0 ? (
           listAdvertisement()
         ) : (

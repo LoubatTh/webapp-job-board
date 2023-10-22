@@ -50,7 +50,7 @@ const Nav = () => {
           </Link>
         </NavbarBrand>
         {authContext.isLoggedIn && authContext.user ? (
-          authContext.user.is_staff && authContext.user.is_superuser ? (
+          authContext.user.is_superuser ? (
             <NavbarItem className="text-black">
               <Link to="/dashboard">Dashboard</Link>
             </NavbarItem>

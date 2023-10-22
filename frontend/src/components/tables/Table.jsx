@@ -13,7 +13,7 @@ import {
   TableRow,
   Tooltip,
 } from "@nextui-org/react";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineLink } from "react-icons/ai";
 import ApplicationForm from "../forms/ApplicationForm";
 import AdvertisementForm from "../forms/AdvertisementForm";
 import PutAdvertisementForm from "../forms/updateForms/PutAdvertisementForm";
@@ -44,10 +44,15 @@ const DataTable = ({ type, data, del, refreshData }) => {
           return <CompanyForm refreshData={() => refreshData(type)} />;
         case "advertisement":
           return (
-            <AdvertisementForm companyId={0} refreshData={() => refreshData(type)} />
+            <AdvertisementForm
+              companyId={0}
+              refreshData={() => refreshData(type)}
+            />
           );
         case "application":
-          return <ApplicationForm adId={0} refreshData={() => refreshData(type)} />;
+          return (
+            <ApplicationForm adId={0} refreshData={() => refreshData(type)} />
+          );
       }
     };
 
@@ -172,7 +177,10 @@ const DataTable = ({ type, data, del, refreshData }) => {
                   align="center"
                   className="flex flex-row justify-center items-center"
                 >
-                  <PutCompanyForm item={item} refreshData={() => refreshData(type)} />
+                  <PutCompanyForm
+                    item={item}
+                    refreshData={() => refreshData(type)}
+                  />
                   <Button
                     color="danger"
                     variant="light"
@@ -196,14 +204,21 @@ const DataTable = ({ type, data, del, refreshData }) => {
                 <TableCell align="center">{item.fullname}</TableCell>
                 <TableCell align="center">{item.email}</TableCell>
                 <TableCell align="center">{item.phone}</TableCell>
-                <TableCell align="center">{item.cv}</TableCell>
-                <TableCell align="center">{item.message}</TableCell>
+                <TableCell align="center"><a href={item.cv} target="_blank" rel="noreferrer"><AiOutlineLink/></a></TableCell>
+                  <TableCell align="center">
+                    <Tooltip content={item.message}>
+                      <span>{item.message.slice(0, 10)}</span>
+                    </Tooltip>
+                  </TableCell>
                 <TableCell align="center">{item.advertisement}</TableCell>
                 <TableCell
                   align="center"
                   className="flex flex-row justify-center items-center"
                 >
-                  <PutApplicationForm item={item} refreshData={() => refreshData(type)}/>
+                  <PutApplicationForm
+                    item={item}
+                    refreshData={() => refreshData(type)}
+                  />
                   <Button
                     color="danger"
                     variant="light"
@@ -250,6 +265,4 @@ DataTable.propTypes = {
   data: PropType.array.isRequired,
   del: PropType.func.isRequired,
   refreshData: PropType.func.isRequired,
-  // refresh: PropType.array.isRequired,
-  // setRefresh: PropType.func.isRequired,
 };

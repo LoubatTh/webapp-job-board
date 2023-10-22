@@ -18,7 +18,7 @@ const Settings = () => {
   return (
     <>
       <Nav />
-      <div>
+      <div className="container mx-auto flex flex-col items-center">
         {authContext.isLoggedIn ? (
           authContext.user.is_staff && authContext.user.company !== null ? (
               // annonce publiés

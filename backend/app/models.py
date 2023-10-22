@@ -51,7 +51,7 @@ class Application(models.Model):
     email = models.EmailField(max_length=254)
     phone = models.CharField(max_length=50)
     cv = models.CharField(max_length=150)
-    cover_letter = models.CharField(max_length=500)
+    message = models.CharField(max_length=500)
     advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE)
 
 

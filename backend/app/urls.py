@@ -1,11 +1,12 @@
 from django.urls import path
 from . import views
-from .views import hello, AdvertisementController, CompanyController , ApplicationController, CompanyAdvertisementController
+from .views import hello, AdvertisementController, CompanyController , ApplicationController, CompanyAdvertisementController, AdvertisementApplicationController
 
 urlpatterns = [
     path("hello", hello, name="hello"),
     path("advertisement/<int:pk>/", AdvertisementController.as_view(), name="advertisement"),
     path("advertisement", AdvertisementController.as_view(), name="advertisement"),
+    path("advertisement/application/<int:pk>", AdvertisementApplicationController.as_view(), name="advertisement_application"),
     path('company', CompanyController.as_view(), name="company"),
     path('company/<int:pk>/', CompanyController.as_view(), name="company"),
     path('company/advertisement/', CompanyAdvertisementController.as_view(), name="company_advertisement"),

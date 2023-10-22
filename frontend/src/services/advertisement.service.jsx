@@ -6,6 +6,9 @@ export const GetAdvertisement = async () =>
 export const GetAdvertisementById = async (id) =>
   API.get(`/api/advertisement/${id}/`, { withCredentials: true });
 
+export const GetAdvertisementApplications = async (id) =>
+  API.get(`/api/advertisement/application/${id}`, { withCredentials: true });
+
 export const PostAdvertisement = async (data) =>
   API.post("/api/advertisement", data, { withCredentials: true });
 

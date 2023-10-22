@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import Nav from "../components/Navbar";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import RecruiterSettings from "../components/RecruiterSettings";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -19,10 +20,10 @@ const Settings = () => {
       <Nav />
       <div>
         {authContext.isLoggedIn ? (
-          authContext.user.is_staff ? (
+          authContext.user.is_staff && authContext.user.company !== null ? (
               // annonce publiés
               // candidatures par annonces
-              <h1>Recruiter Settings</h1>
+              <RecruiterSettings />
           ) : (
             // infos perso
             // voir les annonces auxquels il a postulé

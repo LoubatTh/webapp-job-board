@@ -14,9 +14,11 @@ from django.contrib.auth import get_user_model, login, logout
 from .serializer import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from .validations import custom_validation, validate_email, validate_password
 
+
 # Create your views here.
 def hello(request):
     return HttpResponse("Hello")
+
 
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -36,7 +38,8 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
         # Seuls les utilisateurs administrateurs ont la permission pour les autres méthodes (POST, PUT, DELETE)
         return request.user and request.user.is_superuser
-    
+
+
 class IsStaff(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -120,24 +123,21 @@ class AdvertisementController(APIView):
         advertisement = get_object_or_404(Advertisement, pk=pk)
         advertisement.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 
 class CompanyController(APIView):
     permission_classes = [IsAdminOrReadOnly]
-    
+
     def get(self, request, pk=None):
         if pk:
             company = get_object_or_404(Company, pk=pk)
-            serializer = CompanySerializer(
-                company, context={"request": request}
-            )
+            serializer = CompanySerializer(company, context={"request": request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             company = Company.objects.all()
             serializer = CompanySerializer(company, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
     def post(self, request):
         serializer = CompanySerializer(data=request.data)
         if serializer.is_valid():
@@ -145,7 +145,7 @@ class CompanyController(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(
             {"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )   
+        )
 
     def put(self, request, pk=None):
         company = get_object_or_404(Company, pk=pk)
@@ -155,12 +155,13 @@ class CompanyController(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(
             {"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )     
-    
+        )
+
     def delete(self, request, pk=None):
         company = get_object_or_404(Company, pk=pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class CompanyAdvertisementController(APIView):
     permission_classes = [IsStaff]
@@ -172,6 +173,15 @@ class CompanyAdvertisementController(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class AdvertisementApplicationController(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        advertisement = get_object_or_404(Advertisement, pk=pk)
+        application = Application.objects.filter(advertisement=advertisement)
+        serializer = ApplicationSerializer(application, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class ApplicationController(APIView):
     permission_classes = [IsAdminOrReadOnly]
@@ -180,14 +190,14 @@ class ApplicationController(APIView):
         if pk:
             application = get_object_or_404(Application, pk=pk)
             serializer = ApplicationSerializer(
-            application, context={"request": request}
+                application, context={"request": request}
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             application = Application.objects.all()
             serializer = ApplicationSerializer(application, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
     def post(self, request):
         serializer = ApplicationSerializer(data=request.data)
         if serializer.is_valid():
@@ -195,8 +205,8 @@ class ApplicationController(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(
             {"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )   
-    
+        )
+
     def put(self, request, pk=None):
         application = get_object_or_404(Application, pk=pk)
         serializer = ApplicationSerializer(application, data=request.data)
@@ -205,8 +215,8 @@ class ApplicationController(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(
             {"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )    
-    
+        )
+
     def delete(self, request, pk=None):
         application = get_object_or_404(Application, pk=pk)
         application.delete()
@@ -233,7 +243,7 @@ class UserRegister(APIView):
             if user:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class UserLogin(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -258,6 +268,7 @@ class UserLogin(APIView):
             login(request, user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class UserLogout(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -274,6 +285,7 @@ class UserLogout(APIView):
         logout(request)
         return Response(status=status.HTTP_200_OK)
 
+
 class UserView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -287,4 +299,4 @@ class UserView(APIView):
         :return: Réponse avec les données de l'utilisateur connecté
         """
         serializer = UserSerializer(request.user)
-        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+        return Response({"user": serializer.data}, status=status.HTTP_200_OK)

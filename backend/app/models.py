@@ -84,6 +84,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 	username = models.CharField(max_length=50)
 	number = models.IntegerField()
 	is_staff = models.BooleanField(default=False)
+	company = models.ForeignKey(Company, on_delete=models.CASCADE, blank=True, null=True)
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = ['username','number']
 	objects = AppUserManager()

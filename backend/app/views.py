@@ -35,7 +35,14 @@ class IsAdminOrReadOnly(permissions.BasePermission):
             return True
 
         # Seuls les utilisateurs administrateurs ont la permission pour les autres méthodes (POST, PUT, DELETE)
-        return request.user and (request.user.is_staff or request.user.is_superuser)
+        return request.user and request.user.is_superuser
+    
+class IsStaff(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return request.user and request.user.is_staff
 
 
 class AdvertisementController(APIView):
@@ -154,6 +161,16 @@ class CompanyController(APIView):
         company = get_object_or_404(Company, pk=pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CompanyAdvertisementController(APIView):
+    permission_classes = [IsStaff]
+
+    def get(self, request):
+        company = request.user.company
+        advertisement = Advertisement.objects.filter(company=company)
+        serializer = AdvertisementSerializer(advertisement, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class ApplicationController(APIView):
